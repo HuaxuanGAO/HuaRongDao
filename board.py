@@ -2,8 +2,44 @@ import numpy as np
 import unit
 import time
 
+class Board():
+    def __init__(self, units) :
+        self.units = units
+        self.parent = None
+    def set_parent(self, parent):
+        self.parent = parent
+    def get_all_units(self):
+        res = []
+        for i in self.units:
+            res.append(i.copy()) # deep!
+        return res 
+    def get_unit(self, index):
+        for i in self.units:
+            if i.index == index:
+                return i.copy()
+    def to_int(self):
+        board = np.zeros((5,4), dtype=int)
+        for i in self.units:
+            i.place(board)
+        return board
+    def to_string(self):
+        board = np.zeros((5,4), dtype=str)
+        for i in self.units:
+            x = i.pos[0]
+            y = i.pos[1]
+            if i.text == "t":
+                board[x:x+2, y:y+2] = "t"
+            elif i.text == "h":
+                board[x, y:y+2] = "h"
+            elif i.text == "s":
+                board[x:x+2, y] = "s"
+            elif i.text == "d":
+                board[x, y] = "d"
+
+        return board
+
+
 def init_board():
-    board = np.zeros((5,4), dtype=int)
     cc = unit.Cc(1, (0,1))
     z1 = unit.Zu(2, (0,0))
     z2 = unit.Zu(3, (1,0))
@@ -27,11 +63,10 @@ def init_board():
     # heng5 = unit.Heng(10, (2,0))
 
     all_units = [cc, z1, z2, z3, z4, heng1, heng2, heng3, heng4, heng5]
-    for i in all_units:
-        i.place(board)
-    return board
+    new_board = Board(all_units)
+    return new_board
 
-def get_current_units(board):
+def get_board_from_int_board(board):
     units = []
     for i in range(10):
         distribution = np.where(board==i+1)
@@ -47,7 +82,7 @@ def get_current_units(board):
                 units.append(unit.Heng(i+1, position))
             else:
                 units.append(unit.Shu(i+1, position))
-    return units
+    return Board(units)
 
 def neighbour_index(board, pos):
     res = []
@@ -80,6 +115,9 @@ def get_movable_units(board):
     movable_set.discard(0)
     return movable_set
 
+def get_simplified_board(board):
+    return
+
 def success(board):
     res = board[3:5, 1:3] == 1
     success = True
@@ -89,63 +127,75 @@ def success(board):
     return success
 
 def BFS(queue, visited): 
+    # queue store Board
+    # visited store Board.to_string
+    # do moving on Board.to_int
     while len(queue)>0: 
         # time.sleep(1)
-        # Dequeue a vertex from  
-        # queue and print it 
-        # board = queue.pop(0) #BFS
-        board = queue.pop() #DFS
-        print(board) 
+        board = queue.pop(0) #BFS
+        # board = queue.pop() #DFS 
+        int_board = board.to_int()
+        # print(int_board)
         # Get all adjacent vertices of the 
         # dequeued vertex s. If a adjacent 
         # has not been visited, then mark it 
         # visited and enqueue it 
-        for movable_unit_index in get_movable_units(board):
+        for movable_unit_index in get_movable_units(int_board):
             for i in ["up", "left", "down", "right"]: 
-                current_board = board.copy()
-                current_units = get_current_units(board)
-                movable_unit = current_units[movable_unit_index-1] # from the unit.index to index in all_unit list
+                temp_int_board = int_board.copy()
+                movable_unit = board.get_unit(movable_unit_index) # from the unit.index to index in all_unit list
                 # print("moving " + str(movable_unit_index))
                 # print(movable_unit.pos)
-
                 if i == "up":
-                    if not movable_unit.up(current_board):
+                    if not movable_unit.up(temp_int_board):
                         continue
                 if i == "left":
-                    if not movable_unit.left(current_board):
+                    if not movable_unit.left(temp_int_board):
                         continue
                 if i == "down":
-                    if not movable_unit.down(current_board):
+                    if not movable_unit.down(temp_int_board):
                         continue
                 if i == "right":
-                    if not movable_unit.right(current_board):
+                    if not movable_unit.right(temp_int_board):
                         continue
-                if success(current_board):
+                if success(temp_int_board):
                     print("Done")
-                    return
-                if visited.get(current_board.tobytes()) != True: 
+                    return board
+                # avoid duplicated cases
+                new_board = get_board_from_int_board(temp_int_board)
+                new_board.set_parent(board)
+                if visited.get(new_board.to_string().tobytes()) != True: 
                     # print("new state")
                     # print(current_board)
                     # print("move " + str(movable_unit_index))
                     # print("to " + str(movable_unit.pos))
-                    queue.append(current_board)
-                    visited[current_board.tobytes()] = True
-                
+                    queue.append(new_board)
+                    visited[new_board.to_string().tobytes()] = True
                     # print("repeated")
+    return None
 
-board = init_board()
-visited = {}
-# Create a queue for BFS 
-queue = []
-# Mark the source node as  
-# visited and enqueue it 
-visited[board.tobytes()] = True
-queue.append(board) 
-print(board)
-BFS(queue, visited)
-
-# board = np.zeros((5,4), dtype=int)
-# cc = unit.Cc(1, (3,1))
-# cc.place(board)
-# print(board)
-# print(success(board))
+def main(): 
+    board = init_board()
+    visited = {}
+    # Create a queue for BFS 
+    queue = []
+    # Mark the source node as  
+    # visited and enqueue it 
+    visited[board.to_string().tobytes()] = True
+    queue.append(board) 
+    print("start: ")
+    print(board.to_int())
+    final_board = BFS(queue, visited)
+    if final_board is None:
+        print("Unsolvable")
+    else:
+        trace = []
+        temp = final_board
+        while temp.parent is not None:
+            temp = temp.parent
+            trace.append(temp)
+    # trace = trace.reverse()
+    print("steps: " + str(len(trace)))
+    for i in trace[::-1]:
+        print(i.to_int())
+main()

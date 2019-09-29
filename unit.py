@@ -4,11 +4,14 @@ class Cc():
     def __init__(self, index, pos) :
         self.index = index
         self.pos = pos
+        self.text = "t"
+    def copy(self):
+        newone = type(self)(self.index, self.pos)
+        newone.__dict__.update(self.__dict__)
+        return newone
     def place(self, board):
         pos = self.pos
         board[pos[0]: pos[0]+2, pos[1]: pos[1]+2]=self.index
-    def copy(self):
-        return 
     def up(self, board):
         x = self.pos[0]
         y = self.pos[1]
@@ -58,6 +61,11 @@ class Shu():
     def __init__(self, index, pos) :
         self.index = index
         self.pos = pos
+        self.text = "s"
+    def copy(self):
+        newone = type(self)(self.index, self.pos)
+        newone.__dict__.update(self.__dict__)
+        return newone
     def place(self, board):
         pos = self.pos
         board[pos[0]: pos[0]+2, pos[1]]=self.index
@@ -110,6 +118,11 @@ class Heng():
     def __init__(self, index, pos) :
         self.index = index
         self.pos = pos
+        self.text = "h"
+    def copy(self):
+        newone = type(self)(self.index, self.pos)
+        newone.__dict__.update(self.__dict__)
+        return newone
     def place(self, board):
         pos = self.pos
         board[pos[0], pos[1]:pos[1]+2]=self.index
@@ -162,6 +175,11 @@ class Zu():
     def __init__(self, index, pos) :
         self.index = index
         self.pos = pos
+        self.text = "d"
+    def copy(self):
+        newone = type(self)(self.index, self.pos)
+        newone.__dict__.update(self.__dict__)
+        return newone
     def place(self, board):
         pos = self.pos
         board[pos[0], pos[1]]=self.index

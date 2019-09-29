@@ -38,34 +38,6 @@ class Board():
 
         return board
 
-
-def init_board():
-    cc = unit.Cc(1, (0,1))
-    z1 = unit.Zu(2, (0,0))
-    z2 = unit.Zu(3, (1,0))
-    z3 = unit.Zu(4, (0,3))
-    z4 = unit.Zu(5, (1,3))
-    heng1 = unit.Heng(6, (2,0))
-    heng2 = unit.Heng(7, (2,2))
-    heng3 = unit.Heng(8, (3,0))
-    heng4 = unit.Heng(9, (3,2))
-    heng5 = unit.Heng(10, (4,1))
-
-    # cc = unit.Cc(1, (3,2))
-    # z1 = unit.Zu(2, (3,0))
-    # z2 = unit.Zu(3, (3,1))
-    # z3 = unit.Zu(4, (4,0))
-    # z4 = unit.Zu(5, (4,1))
-    # heng1 = unit.Heng(6, (0,0))
-    # heng2 = unit.Heng(7, (0,2))
-    # heng3 = unit.Heng(8, (1,0))
-    # heng4 = unit.Heng(9, (1,2))
-    # heng5 = unit.Heng(10, (2,0))
-
-    all_units = [cc, z1, z2, z3, z4, heng1, heng2, heng3, heng4, heng5]
-    new_board = Board(all_units)
-    return new_board
-
 def get_board_from_int_board(board):
     units = []
     for i in range(10):
@@ -158,12 +130,12 @@ def BFS(queue, visited):
                 if i == "right":
                     if not movable_unit.right(temp_int_board):
                         continue
-                if success(temp_int_board):
-                    print("Done")
-                    return board
-                # avoid duplicated cases
                 new_board = get_board_from_int_board(temp_int_board)
                 new_board.set_parent(board)
+                if success(temp_int_board):
+                    print("Done")
+                    return new_board
+                # avoid duplicated cases
                 if visited.get(new_board.to_string().tobytes()) != True: 
                     # print("new state")
                     # print(current_board)
@@ -173,29 +145,3 @@ def BFS(queue, visited):
                     visited[new_board.to_string().tobytes()] = True
                     # print("repeated")
     return None
-
-def main(): 
-    board = init_board()
-    visited = {}
-    # Create a queue for BFS 
-    queue = []
-    # Mark the source node as  
-    # visited and enqueue it 
-    visited[board.to_string().tobytes()] = True
-    queue.append(board) 
-    print("start: ")
-    print(board.to_int())
-    final_board = BFS(queue, visited)
-    if final_board is None:
-        print("Unsolvable")
-    else:
-        trace = []
-        temp = final_board
-        while temp.parent is not None:
-            temp = temp.parent
-            trace.append(temp)
-    # trace = trace.reverse()
-    print("steps: " + str(len(trace)))
-    for i in trace[::-1]:
-        print(i.to_int())
-main()

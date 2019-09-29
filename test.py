@@ -1,6 +1,6 @@
 import numpy as np
 import unit
-import board
+import game_board
 
 
 cc = unit.Cc(1, (0,1))

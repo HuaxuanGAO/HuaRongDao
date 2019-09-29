@@ -7,49 +7,51 @@ class Cc():
     def place(self, board):
         pos = self.pos
         board[pos[0]: pos[0]+2, pos[1]: pos[1]+2]=self.index
+    def copy(self):
+        return 
     def up(self, board):
         x = self.pos[0]
         y = self.pos[1]
         if(x==0 or board[x-1, y]!=0 or board[x-1, y+1]!=0):
-            print("up fail")
+            # print("up fail")
             return False
         board[x-1, y:y+2] = self.index
         board[x+1, y:y+2] = 0
         self.pos = (x-1, y)
-        print("up")
+        # print("up")
         return True
     def down(self, board):
         x = self.pos[0]
         y = self.pos[1]
         if(x==board.shape[0]-2 or board[x+2, y]!=0 or board[x+2, y+1]!=0):
-            print("down fail")
+            # print("down fail")
             return False
         board[x+2, y:y+2] = self.index
         board[x, y:y+2] = 0
         self.pos = (x+1, y)
-        print("down")
+        # print("down")
         return True
     def left(self, board):
         x = self.pos[0]
         y = self.pos[1]
         if(y==0 or board[x, y-1]!=0 or board[x+1, y-1]!=0):
-            print("left fail")
+            # print("left fail")
             return False
         board[x:x+2, y-1] = self.index
         board[x:x+2, y+1] = 0
         self.pos = (x, y-1)
-        print("left")
+        # print("left")
         return True
     def right(self, board):
         x = self.pos[0]
         y = self.pos[1]
         if(y==board.shape[1]-2 or board[x, y+2]!=0 or board[x+1, y+2]!=0):
-            print("right fail")
+            # print("right fail")
             return False
         board[x:x+2, y+2] = self.index
         board[x:x+2, y] = 0
         self.pos = (x, y+1)
-        print("right")
+        # print("right")
         return True
 
 class Shu():
@@ -63,45 +65,45 @@ class Shu():
         x = self.pos[0]
         y = self.pos[1]
         if(x==0 or board[x-1, y]!=0):
-            print("up fail")
+            # print("up fail")
             return False
         board[x-1, y] = self.index
         board[x+1, y] = 0
         self.pos = (x-1, y)
-        print("up")
+        # print("up")
         return True
     def down(self, board):
         x = self.pos[0]
         y = self.pos[1]
         if(x==board.shape[0]-2 or board[x+2, y]!=0):
-            print("down fail")
+            # print("down fail")
             return False
         board[x+2, y] = self.index
         board[x, y] = 0
         self.pos = (x+1, y)
-        print("down")
+        # print("down")
         return True
     def left(self, board):
         x = self.pos[0]
         y = self.pos[1]
         if(y==0 or board[x, y-1]!=0 or board[x+1, y-1]!=0):
-            print("left fail")
+            # print("left fail")
             return False
         board[x:x+2, y-1] = self.index
         board[x:x+2, y] = 0
         self.pos = (x, y-1)
-        print("left")
+        # print("left")
         return True
     def right(self, board):
         x = self.pos[0]
         y = self.pos[1]
         if(y==board.shape[1]-1 or board[x, y+1]!=0 or board[x+1, y+1]!=0):
-            print("right fail")
+            # print("right fail")
             return False
         board[x:x+2, y+1] = self.index
         board[x:x+2, y] = 0
         self.pos = (x, y+1)
-        print("right")
+        # print("right")
         return True
 
 class Heng():
@@ -115,45 +117,45 @@ class Heng():
         x = self.pos[0]
         y = self.pos[1]
         if(x==0 or board[x-1, y]!=0 or board[x-1, y+1]!=0):
-            print("up fail")
+            # print("up fail")
             return False
         board[x-1, y:y+2] = self.index
         board[x, y:y+2] = 0
         self.pos = (x-1, y)
-        print("up")
+        # print("up")
         return True
     def down(self, board):
         x = self.pos[0]
         y = self.pos[1]
         if(x==board.shape[0]-1 or board[x+1, y]!=0 or board[x+1, y+1]!=0):
-            print("down fail")
+            # print("down fail")
             return False
         board[x+1, y:y+2] = self.index
         board[x, y:y+2] = 0
         self.pos = (x+1, y)
-        print("down")
+        # print("down")
         return True
     def left(self, board):
         x = self.pos[0]
         y = self.pos[1]
         if(y==0 or board[x, y-1]!=0):
-            print("left fail")
+            # print("left fail")
             return False
         board[x, y-1] = self.index
         board[x, y+1] = 0
         self.pos = (x, y-1)
-        print("left")
+        # print("left")
         return True
     def right(self, board):
         x = self.pos[0]
         y = self.pos[1]
         if(y==board.shape[1]-2 or board[x, y+2]!=0):
-            print("right fail")
+            # print("right fail")
             return False
         board[x, y+2] = self.index
         board[x, y] = 0
         self.pos = (x, y+1)
-        print("right")
+        # print("right")
         return True
 
 class Zu():
@@ -167,43 +169,43 @@ class Zu():
         x = self.pos[0]
         y = self.pos[1]
         if(x==0 or board[x-1, y]!=0):
-            print("up fail")
+            # print("up fail")
             return False
         board[x-1, y] = self.index
         board[x, y] = 0
         self.pos = (x-1, y)
-        print("up")
+        # print("up")
         return True
     def down(self, board):
         x = self.pos[0]
         y = self.pos[1]
         if(x==board.shape[0]-1 or board[x+1, y]!=0):
-            print("down fail")
+            # print("down fail")
             return False
         board[x+1, y] = self.index
         board[x, y] = 0
         self.pos = (x+1, y)
-        print("down")
+        # print("down")
         return True
     def left(self, board):
         x = self.pos[0]
         y = self.pos[1]
         if(y==0 or board[x, y-1]!=0):
-            print("left fail")
+            # print("left fail")
             return False
         board[x, y-1] = self.index
         board[x, y] = 0
         self.pos = (x, y-1)
-        print("left")
+        # print("left")
         return True
     def right(self, board):
         x = self.pos[0]
         y = self.pos[1]
         if(y==board.shape[1]-1 or board[x, y+1]!=0):
-            print("right fail")
+            # print("right fail")
             return False
         board[x, y+1] = self.index
         board[x, y] = 0
         self.pos = (x, y+1)
-        print("right")
+        # print("right")
         return True
